@@ -1,0 +1,104 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+h1 {
+    text-align: center;
+    font-size: 25px;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: stretch;
+}
+
+.toolbar {}
+
+.codetext {
+    background-color: transparent !important;
+    color: transparent !important;
+    z-index: 1;
+    resize: none;
+}
+
+/* Highlighting Style */
+.code-literal-string, .code-literal-integer, .code-literal-float {
+    color: #2aa198;
+}
+
+.code-identifier {
+    color: #268bd2;
+}
+
+.code-keyword {
+    color: #859900;
+    font-weight: bold;
+}
+
+.code-comment {
+    color: #657b83;
+}
+
+/* ---- */
+
+.codehighlight {
+    z-index: 0;
+}
+
+.codecorestyle {
+    font-family: monospace;
+    font-size: 16px;
+    line-height: 20px;
+    caret-color: white;
+    background-color: #002b36;
+    color: #839496;
+}
+
+.codetext, .codehighlight {
+    white-space: pre;
+    overflow: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    width: calc(100% - 20px);
+    padding: 3px;
+    margin: 5px;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    align-content: stretch;
+    flex-grow: 1;
+}
+
+.codebox {
+    display: flex;
+    width: 50%;
+    position: relative;
+}
+
+.outputconsole {
+    width: 50%;
+}
+
+@media only screen and (max-width: 620px) {
+    .container {
+        flex-direction: column;
+    }
+    
+    .codebox, .outputconsole {
+        height: 50%;
+        width: auto;
+    }
+}
