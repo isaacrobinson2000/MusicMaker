@@ -516,10 +516,11 @@ class Track extends Instruction {
     
     exec(resultObject) {
         resultObject.tracks = resultObject.tracks ?? {};
-        // Construct global reference, used for global variable access when variable isn't found in local scope...
-        resultObject.tracks.global = resultObject;
         
-        this.block.exec(resultObject.tracks);
+        resultObject.tracks[this.name] = {global: resultObject};
+        // Construct global reference, used for global variable access when variable isn't found in local scope...
+        
+        this.block.exec(resultObject.tracks[this.name]);
     }
 }
 

@@ -7,20 +7,29 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="style.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="main.js"></script>
     </head>
     <body>
-        <header id="toolbar" class="toolbar">
+        <header class="title">
             <h1>Music Editor</h1>
         </header>
+        <div id="toolbar" class="toolbar">
+            <button id="save"><i class="fa fa-save"></i></button>
+            <button id="open"><i class="fa fa-folder-open"></i></button>
+            <button id="build"><i class="fa fa-cog"></i></button>
+            <button id="play" disabled><i id="playicon" class="fa fa-play"></i></button>
+            <button id="stop" disabled><i id="stopicon" class="fa fa-stop"></i></button>
+            <input type="range" id="play-slider" disabled>
+        </div>
 
         <div class="container">
             <div id="codebox" class="codebox">
-                <code id="codehighlight" class="codehighlight codecorestyle"></code>
+                <code id="codehighlight" class="codehighlight codecorestyle">Write your music code here!</code>
                 <textarea id="codetext" class="codetext codecorestyle" spellcheck="false" wrap="off"></textarea>
             </div>
 
-            <div id="outputconsole" class="outputconsole"></div>
+            <code id="outputconsole" class="outputconsole codecorestyle">Output shows up here!</code>
         </div>
     </body>
 </html>

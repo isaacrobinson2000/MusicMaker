@@ -1,3 +1,4 @@
+"use strict";
 
 function sanitize(s) {
     return (String(s)
@@ -38,6 +39,12 @@ $(document).ready(function() {
     // Hookup syntax highlighting...
     $("#codetext").on("input", function(e) {
         let code = $(this).val();
+        
+        if(code == "") {
+            $("#codehighlight").html("Write your music code here!");
+            return;
+        }
+        
         let tokens = tokenize(code, true); // Lazy Eval...
         
         newText = [];
