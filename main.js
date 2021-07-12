@@ -10,6 +10,9 @@ function sanitize(s) {
 }
 
 $(document).ready(function() {
+    // Some globals to store state...
+    let appData = {};
+    
     // Enable tabbing in text area
     $(document).on("keydown", ".codetext", function(e) {
         var keyCode = e.keyCode || e.which;
@@ -25,6 +28,7 @@ $(document).ready(function() {
             
             this.selectionStart = start + tabInsert.length;
             this.selectionEnd = start + tabInsert.length;
+            updateHighlight(null);
         }
     });
     
@@ -36,9 +40,8 @@ $(document).ready(function() {
         codebox.scrollLeft = tbox.scrollLeft;
     }
     
-    // Hookup syntax highlighting...
-    $("#codetext").on("input", function(e) {
-        let code = $(this).val();
+    function updateHighlight(e) {
+        let code = $("#codetext").val();
         
         if(code == "") {
             $("#codehighlight").html("Write your music code here!");
@@ -47,8 +50,8 @@ $(document).ready(function() {
         
         let tokens = tokenize(code, true); // Lazy Eval...
         
-        newText = [];
-        lastSplit = 0;
+        let newText = [];
+        let lastSplit = 0;
         
         for(let [type, text, line, offset] of tokens) {
             if(type == null) continue;
@@ -68,10 +71,27 @@ $(document).ready(function() {
         if(newText.length > 0 && newText[newText.length - 1] == " ") newText += " ";
         
         $("#codehighlight").html(newText);
-    });
+    }
+    
+    // Hookup syntax highlighting...
+    $("#codetext").on("input", updateHighlight);
     
     $("#codetext").on("scroll", function(e) {
         fixScroll();
+    });
+    
+    $("#build").click(function(e) {
+        let code = $("#codetext").val();
+        $("#outputconsole").html("");
+        
+        try {
+            appData.music = runMusicLang(code);
+        } catch(exp) {
+            $("#outputconsole").html(sanitize(exp));
+            return;
+        }
+        
+        console.log(appData.music);
     });
 });
 

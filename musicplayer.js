@@ -11,9 +11,11 @@ function* enumerate(iterable) {
 
 class TonePlayer {
     
-    static AudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    static AudioCtx = null;
     
     constructor(trackObj, secondsPerTick) {
+        if(TonePlayer.AudioCtx == null) TonePlayer.AudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
         this.tracks = trackObj;
         this.secondsPerTick = secondsPerTick;
         this.millisPerTick = secondsPerTick * 1000;
@@ -45,7 +47,7 @@ class TonePlayer {
     }
     
     static *objZip() {
-        if(arguments.length < 1) throw "Error: Must pass at least 2 objects.";
+        if(arguments.length < 1) throw "Error: Must pass at least 1 object.";
         
         keysObj = arguments[0];
         
@@ -105,6 +107,7 @@ class TonePlayer {
     setLocation(tickOffset) {
         this.pause();
         // Binary search for first spot
+        throw "Not implemented yet...";
     }
     
     _execStep() {
@@ -113,7 +116,7 @@ class TonePlayer {
         
         // Compute the time until the next note..
         let next = [];
-        for(let [name, trackOff, osc, index] of TonePlayer.objZip(this.locations, this.oscillators, this.currentIndexes) {
+        for(let [name, trackOff, osc, index] of TonePlayer.objZip(this.locations, this.oscillators, this.currentIndexes)) {
             if(index >= trackOff.length) {
                 osc.stop();
                 continue;
