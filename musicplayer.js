@@ -31,7 +31,7 @@ class TonePlayer {
         
         this._onUpdate = null;
         this.locations = TonePlayer.getTrackCumulators(lengths);
-        this._length = Math.max(...Object.values(this.lengths));
+        this._length = Math.max(...Object.values(this.locations).map((a) => a[a.length - 1]));
         
         this._playing = false;
         this._timerId = null;
@@ -121,7 +121,7 @@ class TonePlayer {
                 osc.stop();
                 continue;
             }
-            next.push([name, trackOff - this.offset]);
+            next.push([name, trackOff[index] - this.offset]);
         }
         
         // We finished the song...
@@ -136,7 +136,7 @@ class TonePlayer {
         for(let [name, timeUntil] of next) {
             if(timeUntil <= 0) {
                 let idx = this.currentIndexes[name];
-                let track = this.tracks[name];
+                let track = this.tracks[name].notes;
                 let osc = this.oscillators[name];
                 
                 osc.stop();

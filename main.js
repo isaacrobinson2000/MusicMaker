@@ -91,7 +91,6 @@ $(document).ready(function() {
             return;
         }
         
-        console.log(appData.music);
     });
 });
 
