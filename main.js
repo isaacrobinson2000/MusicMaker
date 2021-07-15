@@ -86,11 +86,12 @@ $(document).ready(function() {
         
         try {
             appData.music = runMusicLang(code);
+            let arduinoGen = new ToneArduinoConv(appData.music.tracks, getSecondsPerTick(appData.music));
+            $("#outputconsole").html(sanitize(arduinoGen.getCode()));
         } catch(exp) {
             $("#outputconsole").html(sanitize(exp));
             return;
         }
-        
     });
 });
 

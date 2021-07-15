@@ -630,3 +630,22 @@ function execute(parseTree, preObj = {}) {
 function runMusicLang(code) {
     return execute(parse(tokenize(code), OUTER_SCOPE_INSTRUCTIONS));
 }
+
+function getSecondsPerTick(music) {
+    let vars = music.variables;
+    
+    let validValues = {
+        "SECONDS_PER_UNIT": (a) => a,
+        "MILLIS_PER_UNIT": (a) => a * 1000,
+        "UNITS_PER_SECOND": (a) => 1 / a,
+        "UNITS_PER_MILLI": (a) => 1 / (a * 1000)
+    };
+    
+    for(let prop in validValues) {
+        if(prop in vars) {
+            return validValues[prop](vars[prop]);
+        }
+    }
+    
+    return 1;
+}

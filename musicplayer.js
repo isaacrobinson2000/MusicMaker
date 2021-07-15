@@ -1,14 +1,5 @@
 "use strict";
 
-function* enumerate(iterable) {
-    let i = 0;
-    
-    for(let item in iterable) {
-        yield [i, item];
-        i++;
-    }
-}
-
 class TonePlayer {
     
     static AudioCtx = null;
@@ -30,7 +21,7 @@ class TonePlayer {
         });
         
         this._onUpdate = null;
-        this.locations = TonePlayer.getTrackCumulators(lengths);
+        this.locations = TonePlayer.getTrackCumulators(this.tracks);
         this._length = Math.max(...Object.values(this.locations).map((a) => a[a.length - 1]));
         
         this._playing = false;
@@ -67,7 +58,7 @@ class TonePlayer {
             let cumSum = [];
             let sum = 0;
             
-            for(let note of track) {
+            for(let note of track.notes) {
                 cumSum.push(sum);
                 sum += (note[0] == "play")? note[2]: note[1];
             }
