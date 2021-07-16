@@ -95,7 +95,12 @@ class TonePlayer {
             this._playing = false;
             if(this._timerId != null) clearTimeout(this._timerId);
             // Kill all of the oscillators...
-            for(let [name, osc] of TonePlayer.objZip(this.oscillators)) osc.stop();
+            for(let [name, osc] of TonePlayer.objZip(this.oscillators)) {
+                if(osc != null) {
+                    osc.stop();
+                    this.oscillators[name] = null;
+                }
+            }
             this.onUpdate(this._playing, this.offset);
         }
     }
@@ -118,7 +123,9 @@ class TonePlayer {
                     osc.stop();
                     this.oscillators[name] = null;
                 }
+                continue;
             }
+            console.log(trackOff, index, this.offset);
             next.push([name, trackOff[index] - this.offset]);
         }
         
