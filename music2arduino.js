@@ -17,11 +17,12 @@ class ToneArduinoConv {
     
     constructor(trackObj, secondsPerTick) {
         this.tracks = trackObj;
+        
         this.secondsPerTick = secondsPerTick;
         this.millisPerTick = secondsPerTick * 1000;
         
-        let locs = TonePlayer.getTrackCumulators(this.tracks);
-        this._length = Math.max(...Object.values(locs).map((a) => a[a.length - 1]));
+        this.locations = TonePlayer.getTrackCumulators(this.tracks);
+        this._length = Math.max(...Object.values(this.locations).map((a) => a[a.length - 1]));
     }
     
     getCode() {
@@ -51,19 +52,9 @@ class ToneArduinoConv {
         return Math.floor(128 * (69 + 12 * Math.log2(num / 440)));
     }
     
-    static gcf(a, b) {
-        // GCF for floats...
-        while(b > 1e-8) {
-            let tmp = b;
-            b = a % b;
-            a = tmp;
-        }
-        return a;
-    }
-    
     static solveTrack(track, length, millisPerTick) {
         // We allow up to millisecond percision on the tick unit max...
-        let tickUnit = Math.max(this.findGCFOfDurations(track), 1 / millisPerTick);
+        let tickUnit = 1 / millisPerTick;
         let finalNoteList = [];
         
         for(let [type, arg1, arg2] of track.notes) {

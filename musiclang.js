@@ -345,7 +345,7 @@ class SetValue extends Instruction {
         if(word[0] != "keyword" || word[1] != "set") throw errorMsg(word[2], "Not a set command!");
         if(ident[0] != "identifier") throw errorMsg(ident[2], "First argument to set must be an identifier, not a " + ident[0]);
         if((idOrNum[0] != "identifier") && !(idOrNum[0].startsWith("literal"))) throw errorMsg(idOrNum[2], "Second argument must be a literal or identifier!");
-           
+        
         return [new this(ident[1], idOrNum[0], idOrNum[1], idOrNum[2]), index + 4];
     }
     
@@ -559,7 +559,6 @@ class Repeat extends Instruction {
     
     exec(resultObject) {
         let repCount = PlayNote.VALID_ARG_TYPES[this.nRepsType](resultObject, this.numReps, this.line);
-        
         if(repCount != parseInt(repCount)) throw errorMsg(this.line, "Repeat amount must be an integer.");
         
         let repeatObj = {"global": resultObject};

@@ -13,12 +13,7 @@ class TonePlayer {
         this.offset = 0; // Offset in ticks...
         this.currentIndexes = TonePlayer.initFrom(trackObj, (a, b) => 0);
         
-        this.oscillators = TonePlayer.initFrom(trackObj, (a, b) => {
-            let osc = TonePlayer.AudioCtx.createOscillator()
-            osc.type = "square";
-            osc.connect(TonePlayer.AudioCtx.destination);
-            return osc;
-        });
+        this.oscillators = TonePlayer.initFrom(trackObj, (a, b) => null);
         
         this._onUpdate = null;
         this.locations = TonePlayer.getTrackCumulators(this.tracks);
@@ -32,6 +27,14 @@ class TonePlayer {
         return this._length;
     }
     
+    static genOsc(freq) {
+        let osc = TonePlayer.AudioCtx.createOscillator()
+        osc.type = "square";
+        osc.connect(TonePlayer.AudioCtx.destination);
+        osc.frequency.setValueAtTime(freq, TonePlayer.AudioCtx.currentTime);
+        return osc;
+    }
+    
     static initFrom(otherObj, initialValGen, initObj = {}) {
         for(let prop in otherObj) initObj[prop] = initialValGen(prop, otherObj[prop]);        
         return initObj;
@@ -40,11 +43,13 @@ class TonePlayer {
     static *objZip() {
         if(arguments.length < 1) throw "Error: Must pass at least 1 object.";
         
-        keysObj = arguments[0];
+        let keysObj = arguments[0];
         
         for(let prop in keysObj) {
             let res = [prop];
-            for(let arg in arguments) res.push(arg[prop]);
+            for(let arg of arguments) {
+                res.push(arg[prop]);
+            }
             yield res;
         }
     }
@@ -109,8 +114,10 @@ class TonePlayer {
         let next = [];
         for(let [name, trackOff, osc, index] of TonePlayer.objZip(this.locations, this.oscillators, this.currentIndexes)) {
             if(index >= trackOff.length) {
-                osc.stop();
-                continue;
+                if(osc != null) {
+                    osc.stop();
+                    this.oscillators[name] = null;
+                }
             }
             next.push([name, trackOff[index] - this.offset]);
         }
@@ -125,18 +132,24 @@ class TonePlayer {
         next.sort((a, b) => a[1] - b[1]);
         
         for(let [name, timeUntil] of next) {
+            console.log("Change...")
             if(timeUntil <= 0) {
                 let idx = this.currentIndexes[name];
                 let track = this.tracks[name].notes;
                 let osc = this.oscillators[name];
                 
-                osc.stop();
+                if(osc != null) {
+                    osc.stop();
+                    this.oscillators[name] = null;
+                }
+                
                 if(idx < track.length) {
                     let cmd = track[idx];
                     
                     if(cmd[0] == "play") {
-                        osc.frequency.setValueAtTime(cmd[1], TonePlayer.AudioCtx.currentTime);
-                        osc.play();
+                        let osc = TonePlayer.genOsc(cmd[1]);
+                        osc.start();
+                        this.oscillators[name] = osc;
                     }
                 }
                 
@@ -149,5 +162,6 @@ class TonePlayer {
                 return;
             }
         }
+        this._execStep();
     }
 }
