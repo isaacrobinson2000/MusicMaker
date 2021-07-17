@@ -64,6 +64,11 @@ class TonePlayer {
             let cumSum = [];
             let sum = 0;
             
+            if(track.notes == undefined) {
+                cumSums[trackName] = [0];
+                continue
+            }
+            
             for(let note of track.notes) {
                 cumSum.push(sum);
                 sum += (note[0] == "play")? note[2]: note[1];
@@ -156,7 +161,8 @@ class TonePlayer {
         this.offset = offset;
         // Update indexes... We use a binary search...
         for(let name in this.currentIndexes) {
-            this.currentIndexes[name] = TonePlayer.binarySearch(this.locations[name], offset);
+            if(this.locations[name].length > 1)
+                this.currentIndexes[name] = TonePlayer.binarySearch(this.locations[name], offset);
         }
         // All done... We now check if the code was playing. If so, begin playing again...
         if(wasPlaying) {
@@ -196,7 +202,7 @@ class TonePlayer {
         for(let [name, timeUntil] of next) {
             if(timeUntil <= 0) {
                 let idx = this.currentIndexes[name];
-                let track = this.tracks[name].notes;
+                let track = this.tracks[name].notes ?? [];
                 let osc = this.oscillators[name];
                 
                 if(osc != null) {

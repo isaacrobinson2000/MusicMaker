@@ -30,6 +30,9 @@ class ToneArduinoConv {
         
         for(let trackName in this.tracks) {
             let track = this.tracks[trackName];
+            
+            if(track.notes == undefined) continue;
+            
             let [noteLst, tickSpeed] = ToneArduinoConv.solveTrack(track, this.length, this.millisPerTick);
             let encodedTrack = ToneArduinoConv.encodeTrack(noteLst);
             trackSol.push(ToneArduinoConv.toCode(trackName, encodedTrack, tickSpeed));
