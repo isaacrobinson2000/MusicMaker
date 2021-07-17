@@ -3,6 +3,7 @@
 class TonePlayer {
     
     static AudioCtx = null;
+    static MAX_UPDATE_WAIT = 100;
     
     constructor(trackObj, secondsPerTick) {
         if(TonePlayer.AudioCtx == null) TonePlayer.AudioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -75,6 +76,31 @@ class TonePlayer {
         return cumSums;
     }
     
+    static binarySearch(locations, offset) {
+        if(locations.length < 2) throw "Must have at least 2 elements.";
+        
+        let low = 0;
+        let high = locations.length - 1;
+        let mid = 0;
+        
+        while(low < high) {
+            mid = Math.floor((low + high) / 2);
+            let off2 = locations[mid];
+            let off3 = locations[mid + 1];
+            if(offset < off2) {
+                high = mid - 1;
+            }
+            else if(offset >= off3){
+                low = mid + 1;
+            }
+            else {
+                return mid;
+            }
+        }
+        
+        return Math.max(Math.floor((high + low) / 2), 0);
+    }
+    
     set onUpdate(func) {
         this._onUpdate = func;
     }
@@ -90,25 +116,55 @@ class TonePlayer {
         }
     }
     
-    pause() {
+    pause(evt = true) {
         if(this._playing) {
             this._playing = false;
             if(this._timerId != null) clearTimeout(this._timerId);
             // Kill all of the oscillators...
             for(let [name, osc] of TonePlayer.objZip(this.oscillators)) {
                 if(osc != null) {
+                    // Was a note playing? Kill the oscillator and move the index back...
                     osc.stop();
                     this.oscillators[name] = null;
+                    this.currentIndexes[name]--;
                 }
             }
-            this.onUpdate(this._playing, this.offset);
+            if(evt) this.onUpdate(this._playing, this.offset);
         }
     }
     
-    setLocation(tickOffset) {
+    stop() {
         this.pause();
-        // Binary search for first spot
-        throw "Not implemented yet...";
+        this.setLocation(0);
+    }
+    
+    get playing() {
+        return this._playing;
+    }
+    
+    setLocation(offset) {
+        offset = Number(offset);
+        
+        if((offset < 0) || (offset > this.length)) {
+            throw "Error: offset not within track!";
+        }
+        
+        let wasPlaying = this._playing;
+        // Pause it....
+        this.pause(false);
+        // Update offset...
+        this.offset = offset;
+        // Update indexes... We use a binary search...
+        for(let name in this.currentIndexes) {
+            this.currentIndexes[name] = TonePlayer.binarySearch(this.locations[name], offset);
+        }
+        // All done... We now check if the code was playing. If so, begin playing again...
+        if(wasPlaying) {
+            this.play();
+        }
+        else {
+            this.onUpdate(this._playing, this.offset);
+        }
     }
     
     _execStep() {
@@ -125,7 +181,6 @@ class TonePlayer {
                 }
                 continue;
             }
-            console.log(trackOff, index, this.offset);
             next.push([name, trackOff[index] - this.offset]);
         }
         
@@ -139,7 +194,6 @@ class TonePlayer {
         next.sort((a, b) => a[1] - b[1]);
         
         for(let [name, timeUntil] of next) {
-            console.log("Change...")
             if(timeUntil <= 0) {
                 let idx = this.currentIndexes[name];
                 let track = this.tracks[name].notes;
@@ -164,8 +218,9 @@ class TonePlayer {
             }
             else {
                 // Setup timeout for next note play...
-                this.offset += timeUntil;
-                this._timerId = setTimeout(() => this._execStep(), this.millisPerTick * timeUntil);
+                let step = Math.min(timeUntil, TonePlayer.MAX_UPDATE_WAIT / this.millisPerTick);
+                this.offset += step;
+                this._timerId = setTimeout(() => this._execStep(), step * this.millisPerTick);
                 return;
             }
         }
