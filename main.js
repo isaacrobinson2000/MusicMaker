@@ -114,10 +114,23 @@ $(document).ready(function() {
         codebox.scrollLeft = tbox.scrollLeft;
     }
     
+    function addLineNums(txt) {
+        let finalTxt = [];
+        let txtLst = txt.split("\n");
+        let spacesNeeded = Math.floor(Math.log10(txtLst.length)) + 2
+        
+        for(let i = 0; i < txtLst.length; i++) {
+            finalTxt.push("<span class='line-number'>" + (i + " ").padStart(spacesNeeded, " ") + "</span>" + txtLst[i]);
+        }
+        
+        return [finalTxt.join("\n"), spacesNeeded];
+    }
+    
     function updateHighlight(e) {
         let code = $("#codetext").val();
         
         if(code == "") {
+            $(".codetextholder").css("left", "0");
             $("#codehighlight").html("Write your music code here!");
             return;
         }
@@ -142,9 +155,12 @@ $(document).ready(function() {
         fixScroll();
         
         newText = newText.join("");
-        if(newText.length > 0 && newText[newText.length - 1] == "\n") newText += " ";
+        let [finalTxt, spacing] = addLineNums(newText);
+        $(".codetextholder").css("left", spacing + "ch");
         
-        $("#codehighlight").html(newText);
+        if(newText.length > 0 && finalTxt[finalTxt.length - 1] == "\n") finalTxt += " ";
+        
+        $("#codehighlight").html(finalTxt);
     }
     
     // Hookup syntax highlighting...
