@@ -120,7 +120,7 @@ $(document).ready(function() {
         let spacesNeeded = Math.floor(Math.log10(txtLst.length)) + 2
         
         for(let i = 0; i < txtLst.length; i++) {
-            finalTxt.push("<span class='line-number'>" + (i + " ").padStart(spacesNeeded, " ") + "</span>" + txtLst[i]);
+            finalTxt.push("<span class='line-number'>" + ((i + 1) + " ").padStart(spacesNeeded, " ") + "</span>" + txtLst[i]);
         }
         
         return [finalTxt.join("\n"), spacesNeeded];
