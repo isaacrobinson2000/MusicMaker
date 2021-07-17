@@ -98,22 +98,34 @@ button:disabled {
     flex-grow: 1;
 }
 
-.codetext, .codehighlight {
-    white-space: pre;
-    overflow: auto;
+.codetextholder, .codehighlightholder {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    width: calc(100% - 0.8rem);
-    height: calc(100% - 0.8rem);
-    padding: 3px;
-    margin: 5px;
+    right: 0;
+    bottom: 0;
+    padding: 0;
+    margin: 0.25em;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     border-radius: 0.25em;
+}
+
+.codehighlight, .codetext {
+    display: block;
+    white-space: pre;
+    overflow: auto;
+    padding: 0.25em;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 0.25em;
+    outline: none;
+    border: none;
 }
 
 .container {

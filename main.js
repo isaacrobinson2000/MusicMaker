@@ -142,7 +142,7 @@ $(document).ready(function() {
         fixScroll();
         
         newText = newText.join("");
-        if(newText.length > 0 && newText[newText.length - 1] == " ") newText += " ";
+        if(newText.length > 0 && newText[newText.length - 1] == "\n") newText += " ";
         
         $("#codehighlight").html(newText);
     }
