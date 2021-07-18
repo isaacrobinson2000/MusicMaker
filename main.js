@@ -9,9 +9,11 @@ function sanitize(s) {
         .replaceAll("'", '&#039;'));
 }
 
-$(document).ready(function() {
+$(document).ready(async function() {
     // Some globals to store state...
     let appData = {};
+    
+    ToneArduinoConv.loadTemplate();
     
     class TonePlayerController {
         constructor(playButton, stopButton, progressSlider, tonePlayer, playChange = null) {
@@ -205,5 +207,8 @@ $(document).ready(function() {
             console.log("Warning: " + e);
         }
     });
+    
+    // Disable selection on noselect elements.
+    $(".noselect").on("selectstart", false);
 });
 

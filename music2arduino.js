@@ -14,6 +14,8 @@ class ToneArduinoConv {
     static getTrackCumulators = TonePlayer.getTrackCumulators;
     static MAX_TICKS = (2 ** 14) - 1;
     static NUMS_PER_LINE = 5;
+    static TRACK_TEMPLATE = null;
+    static TRACK_TEMPLATE_URL = "MusicPlayerTemplate.txt";
     
     constructor(trackObj, secondsPerTick) {
         this.tracks = trackObj;
@@ -27,18 +29,48 @@ class ToneArduinoConv {
     
     getCode() {
         let trackSol = [];
+        let firstValidTrack = null;
         
         for(let trackName in this.tracks) {
             let track = this.tracks[trackName];
             
             if(track.notes == undefined) continue;
             
+            firstValidTrack = trackName;
             let [noteLst, tickSpeed] = ToneArduinoConv.solveTrack(track, this.length, this.millisPerTick);
             let encodedTrack = ToneArduinoConv.encodeTrack(noteLst);
             trackSol.push(ToneArduinoConv.toCode(trackName, encodedTrack, tickSpeed));
         }
         
-        return trackSol.join("\n");
+        if(trackSol.length == 0) {
+            return "";
+        } 
+        else {
+            let first
+            let template = ToneArduinoConv.TRACK_TEMPLATE;
+            
+            if(template != null) {
+                return template.replace("###MUSICDATA###", trackSol.join("\n")).replace("###TRACKNAME###", firstValidTrack);
+            }
+            else {
+                return trackSol.join("\n");
+            }
+        }
+    }
+    
+    static async loadTemplate() {
+        try {
+            this.TRACK_TEMPLATE = await (new Promise((accept, reject) => {
+                $.ajax({
+                    url: this.TRACK_TEMPLATE_URL,
+                    success: (d) => accept(d),
+                    error: (j, e) => reject(e),
+                    dataType: "text"
+                });
+            }));
+        } catch (e) {
+            this.TRACK_TEMPLATE = null;
+        }
     }
     
     static findGCFOfDurations(track) {
@@ -115,7 +147,7 @@ class ToneArduinoConv {
     }
     
     static toCode(name, encodedTrack, tickSpeed) {
-        let finalString = "const uint16_t PROGMEM " + name + " = {";
+        let finalString = "const uint16_t PROGMEM " + name + "[] = {";
         
         for(let [i, binary] of enumerate(encodedTrack)) {
             if(i % this.NUMS_PER_LINE == 0) finalString += "\n  ";
