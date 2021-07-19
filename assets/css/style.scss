@@ -4,7 +4,11 @@
 @import "{{ site.theme }}";
 
 .page-header {
-    background-image: url("background.png");
+    background-image: url("background.png") !important;
     background-repeat: no-repeat;
     background-size: cover;
+}
+
+.site-footer {
+    display: none !important;
 }
