@@ -159,12 +159,18 @@ button:disabled, a:hover {
     flex-grow: 1;
 }
 
-.codebox {
+.codebox, .outputconsolediv {
     width: 50%;
     position: relative;
 }
 
 .outputconsole {
+    position: absolute;
+    display: block;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
     background-color: #073642;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -173,7 +179,6 @@ button:disabled, a:hover {
     overflow: auto;
     padding: 3px;
     margin: 5px;
-    width: 50%;
 }
 
 @media only screen and (max-width: 620px) {
@@ -181,7 +186,7 @@ button:disabled, a:hover {
         flex-direction: column;
     }
     
-    .codebox, .outputconsole {
+    .codebox, .outputconsolediv {
         height: 50%;
         width: auto;
     }
