@@ -21,7 +21,7 @@ body {
     align-content: stretch;
 }
 
-button {
+button, a {
     background-color: #cb4b16;
     font-size: 14px;
     color: #eee8d5;
@@ -30,21 +30,26 @@ button {
     border: none;
     border-radius: 0.1em;
     box-shadow: 0 0.2em #eb7847;
+    text-decoration: none;
 }
 
-button:hover {
+button:hover, a:hover {
     background-color: #e86830;
     box-shadow: 0 0.3em #f09a75;
 }
 
-button:active {
+button:active, a:hover {
     background-color: #a13d12;
     box-shadow: 0 0.15em #e65719;
 }
 
-button:disabled {
+button:disabled, a:hover {
     background-color: #c07859;
     box-shadow: 0 0.15em #d5a590;
+}
+
+.home-link {
+    float: left;
 }
 
 .codetext {
