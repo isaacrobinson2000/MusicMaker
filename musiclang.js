@@ -633,6 +633,8 @@ function runMusicLang(code) {
 function getSecondsPerTick(music) {
     let vars = music.variables;
     
+    if(vars == null) return 1; 
+    
     let validValues = {
         "SECONDS_PER_UNIT": (a) => a,
         "MILLIS_PER_UNIT": (a) => a * 1000,
