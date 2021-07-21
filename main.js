@@ -208,6 +208,21 @@ $(document).ready(async function() {
         }
     });
     
+    // Download support...
+    $("#download").on("click", function(e) {
+        function downloadFile(filename, data) {
+            let aElem = $("<a>")
+            aElem.css("display", "none");
+            aElem.attr("download", filename);
+            aElem.attr("href", "data:text/plain;charset=utf-8," + encodeURIComponent(data));
+            $("body").append(aElem);
+            aElem[0].click();
+            aElem.remove();
+        }
+        
+        downloadFile("MusicFile.txt", $("#codetext").val());
+    });
+    
     // Disable selection on noselect elements.
     $(".noselect").on("selectstart", false);
 });
