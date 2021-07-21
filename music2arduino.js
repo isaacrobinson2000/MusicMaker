@@ -50,7 +50,7 @@ class ToneArduinoConv {
             let template = ToneArduinoConv.TRACK_TEMPLATE;
             
             if(template != null) {
-                return template.replace("###MUSICDATA###", trackSol.join("\n")).replace("###TRACKNAME###", firstValidTrack);
+                return template.replaceAll("###MUSICDATA###", trackSol.join("\n")).replaceAll("###TRACKNAME###", firstValidTrack);
             }
             else {
                 return trackSol.join("\n");
