@@ -240,6 +240,8 @@ $(document).ready(async function() {
                 $("#outputconsole").html(sanitize(e));
             }
         }
+        
+        fileObj.value = null;
     });
     
     // Disable selection on noselect elements.
