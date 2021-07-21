@@ -18,9 +18,10 @@
             <h1>Music Editor</h1>
         </header>
         <div id="toolbar" class="toolbar">
-            <button id="save"><i class="fa fa-save"></i></button>
+            <!-- <button id="save"><i class="fa fa-save"></i></button> !-->
             <button id="download"><i class="fa fa-download"></i></button>
-            <button id="open"><i class="fa fa-folder-open"></i></button>
+            <!--<button id="open"><i class="fa fa-folder-open"></i></button>!-->
+            <button id="upload"><i class="fa fa-upload"></i></button>
             <button id="build"><i class="fa fa-cog"></i></button>
             <button id="play" disabled><i id="playicon" class="fa fa-play"></i></button>
             <button id="stop" disabled><i id="stopicon" class="fa fa-stop"></i></button>
@@ -41,5 +42,6 @@
                 <code id="outputconsole" class="outputconsole codecorestyle">Output shows up here!</code>
             </div>
         </div>
+        <input id="fileselect" type="file" style="display: none;" accept=".txt,text/plain"></input>
     </body>
 </html>

@@ -223,6 +223,25 @@ $(document).ready(async function() {
         downloadFile("MusicFile.txt", $("#codetext").val());
     });
     
+    $("#upload").on("click", function(e) {
+        $("#fileselect")[0].click();
+    });
+    
+    $("#fileselect").on("change", async function(e) {
+        let fileObj = $("#fileselect")[0];
+        
+        if(fileObj.files.length > 0) {
+            let file = fileObj.files[0];
+            try {
+                let text = await file.text();
+                $("#codetext").val(text);
+                updateHighlight(null);
+            } catch(e) {
+                $("#outputconsole").html(sanitize(e));
+            }
+        }
+    });
+    
     // Disable selection on noselect elements.
     $(".noselect").on("selectstart", false);
 });
