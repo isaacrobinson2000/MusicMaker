@@ -89,10 +89,14 @@ $(document).ready(async function() {
         }
     }
     
+    
     // Enable tabbing in text area
     $(document).on("keydown", ".codetext", function(e) {
         var keyCode = e.keyCode || e.which;
         let tabInsert = "    ";
+        let tabLength = 4;
+        let tabInsertRemove = /[ ]{0,4}$/g;
+        let tabBlockRemove = /^[ ]{0,4}/gm;
         
         if(keyCode == 9) {
             e.preventDefault();
@@ -100,11 +104,51 @@ $(document).ready(async function() {
             let end = this.selectionEnd;
             let currentVal = $(this).val();
             
-            $(this).val(currentVal.slice(0, start) + tabInsert + currentVal.slice(end));
-            
-            this.selectionStart = start + tabInsert.length;
-            this.selectionEnd = start + tabInsert.length;
-            updateHighlight(null);
+            if(currentVal.slice(start, end).includes("\n")) {
+                let newStart = currentVal.slice(0, start).lastIndexOf("\n") + 1;
+                
+                let changedText = null;
+                
+                let subEnd = (currentVal[end - 1] == "\n")? end - 1: end;
+                
+                if(e.shiftKey) {
+                    changedText = currentVal.slice(newStart, subEnd).replaceAll(tabBlockRemove, "");
+                }
+                else {
+                    changedText = currentVal.slice(newStart, subEnd).replaceAll(/^/gm, tabInsert)
+                }
+                   
+                $(this).val(currentVal.slice(0, newStart) + changedText + currentVal.slice(subEnd));
+                
+                this.selectionStart = newStart;
+                this.selectionEnd = newStart + changedText.length + (end - subEnd);
+                updateHighlight(null);
+            }
+            else {
+                let newVal = null;
+                let shift = null;
+                
+                if(e.shiftKey) {
+                    newVal = currentVal.slice(0, start).replace(tabInsertRemove, "") + currentVal.slice(start);
+                    shift = newVal.length - currentVal.length;
+                    
+                    let gap = -shift;
+                    if(gap < tabLength) {
+                        let tabExtraRem = new RegExp("^[ ]{0," + (tabLength - gap) + "}", "gm");
+                        newVal = newVal.slice(0, start - gap) + newVal.slice(start - gap, end - gap).replace(tabExtraRem, "") + newVal.slice(end - gap);
+                    }
+                }
+                else {
+                    newVal = currentVal.slice(0, start) + tabInsert + currentVal.slice(start);
+                    shift = newVal.length - currentVal.length;
+                }
+                
+                $(this).val(newVal);
+                
+                this.selectionStart = start + shift;
+                this.selectionEnd = end + (newVal.length - currentVal.length);
+                updateHighlight(null);
+            }
         }
     });
     
