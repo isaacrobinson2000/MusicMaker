@@ -41,6 +41,8 @@ $(document).ready(async function() {
                 if(this._playChange != null) this._playChange(playing, offset);
                 this._slider.prop("value", offset);
             };
+            
+            if(playChange != null) playChange(false, 0);
         }
         
         resetSlider() {
