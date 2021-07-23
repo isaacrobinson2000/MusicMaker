@@ -1,14 +1,9 @@
 ---
 ---
 
-@import "{{ site.theme }}";
+@import 'jekyll-theme-cayman';
 
 .page-header {
-    background-image: url("background.png") !important;
-    background-repeat: no-repeat;
+    background-image: url("background.png"); 
     background-size: cover;
-}
-
-.site-footer {
-    display: none !important;
 }
