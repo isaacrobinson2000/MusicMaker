@@ -1,4 +1,4 @@
-[Home](index.md){: .btn}
+[Home](index.md)
 
 ### Class Code Examples
 
