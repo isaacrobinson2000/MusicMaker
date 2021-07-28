@@ -2,6 +2,8 @@
 
 ### Class Resources
 
+#### Sheet Music 🎵:
+
 ##### Musescore
 
 Musescore provides a wide range of sheet music for different 
