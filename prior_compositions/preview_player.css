@@ -36,6 +36,6 @@ button:active, a:active {
 }
 
 button:disabled, a:disabled {
-    background-color: #447e74;
-    box-shadow: 0 0.15em #50958a;
+    background-color: #568f86;
+    box-shadow: 0 0.15em #80b3ab;
 }
