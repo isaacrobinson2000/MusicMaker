@@ -9,11 +9,11 @@ $(document).ready(async function() {
         // Parse the music...
         let music = runMusicLang(music_code);
         
-        let play_icon = $($.parseHTML('<i class="playicon" class="fa fa-play"></i>'));
+        let play_icon = $($.parseHTML('<i class="playicon fa fa-play"></i>'));
         let play_btn = $($.parseHTML('<button class="play"></button>'));
         play_btn.append(play_icon);
         
-        let stop_btn = $($.parseHTML('<button class="stop" disabled><i id="stopicon" class="fa fa-stop"></i></button>'));
+        let stop_btn = $($.parseHTML('<button class="stop" disabled><i class="stopicon fa fa-stop"></i></button>'));
         let slider = $($.parseHTML('<input type="range" class="play-slider" disabled>'));
         
         let container = $($.parseHTML('<div class="player-div"></div>'));
@@ -38,6 +38,9 @@ $(document).ready(async function() {
                     play_icon.removeClass(icon(!p)).addClass(icon(p));
                 }
             )
+            
+            PLAYERS[play_id].connect();
+            play_btn.trigger("click");
         });
         
         play_div.append(container);
