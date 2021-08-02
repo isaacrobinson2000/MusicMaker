@@ -6,14 +6,14 @@ $(document).ready(async function() {
         // Parse the music...
         let music = runMusicLang(music_code);
         
-        let play_icon = $.parseHTML('<i class="playicon" class="fa fa-play"></i>');
-        let play_btn = $.parseHTML('<button class="play"></button>');
+        let play_icon = $($.parseHTML('<i class="playicon" class="fa fa-play"></i>'));
+        let play_btn = $($.parseHTML('<button class="play"></button>'));
         play_btn.append(play_icon);
         
-        let stop_btn = $.parseHTML('<button class="stop"><i id="stopicon" class="fa fa-stop"></i></button>');
-        let slider = $.parseHTML('<input type="range" class="play-slider">');
+        let stop_btn = $($.parseHTML('<button class="stop"><i id="stopicon" class="fa fa-stop"></i></button>'));
+        let slider = $($.parseHTML('<input type="range" class="play-slider">'));
         
-        let container = $.parseHTML('<div class="player-div"></div>');
+        let container = $($.parseHTML('<div class="player-div"></div>'));
         container.append(play_btn);
         container.append(stop_btn);
         container.append(slider);
