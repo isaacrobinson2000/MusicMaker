@@ -43,7 +43,7 @@ $(document).ready(async function() {
             
             console.log(d);
             
-            for(let info in d.split("@@@")) {
+            for(let info of d.split("@@@")) {
                 console.log(info);
                 if(i % 2 == 0) {
                     play_div.append($.parseHTML("<h3>" + info.trim() + "</h3>"));
