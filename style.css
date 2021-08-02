@@ -38,12 +38,12 @@ button:hover, a:hover {
     box-shadow: 0 0.3em #f09a75;
 }
 
-button:active, a:hover {
+button:active, a:active {
     background-color: #a13d12;
     box-shadow: 0 0.15em #e65719;
 }
 
-button:disabled, a:hover {
+button:disabled, a:disabled {
     background-color: #c07859;
     box-shadow: 0 0.15em #d5a590;
 }
