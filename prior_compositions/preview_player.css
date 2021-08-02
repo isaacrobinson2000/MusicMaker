@@ -1,0 +1,14 @@
+#player-preview-div {
+    width: 100%;
+}
+
+.player-div {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.play-slider {
+    flex-grow: 1;
+}

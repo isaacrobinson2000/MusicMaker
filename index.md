@@ -17,3 +17,9 @@ Below is a list of all the resources needed for this class! (Excluding hardware)
  - [Music Editor](editor.html)
  - [Class Code Examples](examples.html)
  - [Class Resources](resources.html)
+
+### Prior Class Compositions
+
+Listen to compositions made by prior classes!
+
+[Class Compositions](prior_compositions/listings.html)
