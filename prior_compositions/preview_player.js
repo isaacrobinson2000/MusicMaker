@@ -1,4 +1,7 @@
-let PLAYERS = [];
+"use strict";
+
+let PLAYERS = {};
+let ID_GEN = 0;
 
 $(document).ready(async function() {
     
@@ -10,16 +13,22 @@ $(document).ready(async function() {
         let play_btn = $($.parseHTML('<button class="play"></button>'));
         play_btn.append(play_icon);
         
-        let stop_btn = $($.parseHTML('<button class="stop"><i id="stopicon" class="fa fa-stop"></i></button>'));
-        let slider = $($.parseHTML('<input type="range" class="play-slider">'));
+        let stop_btn = $($.parseHTML('<button class="stop" disabled><i id="stopicon" class="fa fa-stop"></i></button>'));
+        let slider = $($.parseHTML('<input type="range" class="play-slider" disabled>'));
         
         let container = $($.parseHTML('<div class="player-div"></div>'));
         container.append(play_btn);
         container.append(stop_btn);
         container.append(slider);
         
-        PLAYERS.push(
-            new TonePlayerController(
+        let play_id = ID_GEN++;
+        
+        // On first click, generate the player...
+        play_btn.on("click", () => {
+            if(play_id in PLAYERS) return;
+            play_btn.off("click");
+            
+            PLAYERS[play_id] = new TonePlayerController(
                 play_btn,
                 stop_btn,
                 slider,
@@ -29,7 +38,7 @@ $(document).ready(async function() {
                     play_icon.removeClass(icon(!p)).addClass(icon(p));
                 }
             )
-        );
+        });
         
         play_div.append(container);
     }
@@ -46,7 +55,7 @@ $(document).ready(async function() {
             for(let info of d.split("@@@")) {
                 console.log(info);
                 if(i % 2 == 0) {
-                    play_div.append($.parseHTML("<h3>" + info.trim() + "</h3>"));
+                    play_div.append($.parseHTML("<h4>" + info.trim() + "</h4>"));
                 } 
                 else {
                     addPlayer(play_div, info);

@@ -1,3 +1,4 @@
+"use strict";
 
 class TonePlayerController {
     constructor(playButton, stopButton, progressSlider, tonePlayer, playChange = null) {
