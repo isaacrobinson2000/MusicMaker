@@ -14,14 +14,14 @@
 }
 
 button, a {
-    background-color: #159983;
+    background-color: #18aa91;
     font-size: 14px;
     color: white;
     padding: 0.5em;
     margin: 0.1em;
     border: none;
     border-radius: 0.1em;
-    box-shadow: 0 0.2em  #1ccaad;
+    box-shadow: 0 0.2em #1ccaad;
     text-decoration: none;
 }
 
@@ -36,6 +36,6 @@ button:active, a:active {
 }
 
 button:disabled, a:disabled {
-    background-color: #38756b;
-    box-shadow: 0 0.15em #4b9b8e;
+    background-color: #127d6b;
+    box-shadow: 0 0.15em #18aa91;
 }
