@@ -31,8 +31,8 @@ button:hover, a:hover {
 }
 
 button:active, a:active {
-    background-color: #127d6b;
-    box-shadow: 0 0.15em #09433a;
+    background-color: #138673;
+    box-shadow: 0 0.15em #19b399;
 }
 
 button:disabled, a:disabled {
