@@ -52,11 +52,8 @@ $(document).ready(async function() {
             let i = 0;
             let play_div = $("#player-preview-div");
             play_div.empty();
-            
-            console.log(d);
-            
+                        
             for(let info of d.split("@@@")) {
-                console.log(info);
                 if(i % 2 == 0) {
                     play_div.append($.parseHTML("<h4>" + info.trim() + "</h4>"));
                 } 

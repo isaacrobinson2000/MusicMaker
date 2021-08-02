@@ -12,3 +12,30 @@
 .play-slider {
     flex-grow: 1;
 }
+
+button, a {
+    background-color: #159983;
+    font-size: 14px;
+    color: white;
+    padding: 0.5em;
+    margin: 0.1em;
+    border: none;
+    border-radius: 0.1em;
+    box-shadow: 0 0.2em  #1ccaad;
+    text-decoration: none;
+}
+
+button:hover, a:hover {
+    background-color: #1ccaad;
+    box-shadow: 0 0.3em #35e3c6;
+}
+
+button:active, a:hover {
+    background-color: #35e3c6;
+    box-shadow: 0 0.15em #09433a;
+}
+
+button:disabled, a:hover {
+    background-color: #38756b;
+    box-shadow: 0 0.15em #4b9b8e;
+}
