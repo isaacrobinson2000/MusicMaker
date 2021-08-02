@@ -7,35 +7,10 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: flex-start;
 }
 
 .play-slider {
     flex-grow: 1;
-}
-
-button, a {
-    background-color: #18aa91;
-    font-size: 14px;
-    color: white;
-    padding: 0.5em;
-    margin: 0.1em;
-    border: none;
-    border-radius: 0.1em;
-    box-shadow: 0 0.2em #1ccaad;
-    text-decoration: none;
-}
-
-button:hover, a:hover {
-    background-color: #1ccaad;
-    box-shadow: 0 0.3em #35e3c6;
-}
-
-button:active, a:active {
-    background-color: #138673;
-    box-shadow: 0 0.15em #19b399;
-}
-
-button:disabled, a:disabled {
-    background-color: #568f86;
-    box-shadow: 0 0.15em #80b3ab;
 }

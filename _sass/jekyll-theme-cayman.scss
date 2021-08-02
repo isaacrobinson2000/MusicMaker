@@ -350,29 +350,30 @@ a {
   }
 }
 
-.site-footer {
-  padding-top: 2rem;
-  margin-top: 2rem;
-  border-top: solid 1px $hr-border-color;
-
-  @include large {
-    font-size: 1rem;
-  }
-
-  @include medium {
-    font-size: 1rem;
-  }
-
-  @include small {
-    font-size: 0.9rem;
-  }
+button, .button {
+    background-color: #18aa91;
+    font-size: 14px;
+    color: white;
+    padding: 0.5em 0.75em;
+    margin: 0.1em;
+    border: none;
+    border-radius: 0.1em;
+    box-shadow: 0 0.2em #1ccaad;
+    text-decoration: none;
 }
 
-.site-footer-owner {
-  display: block;
-  font-weight: bold;
+button:hover, .button:hover {
+    background-color: #1ccaad;
+    box-shadow: 0 0.3em #35e3c6;
+    text-decoration: none;
 }
 
-.site-footer-credits {
-  color: $blockquote-text-color;
+button:active, .button:active {
+    background-color: #138673;
+    box-shadow: 0 0.15em #19b399;
+}
+
+button:disabled, .button:disabled {
+    background-color: #70a9a0;
+    box-shadow: 0 0.15em #9fc6c0;
 }
