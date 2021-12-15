@@ -126,8 +126,19 @@ const NOTE_TO_MIDI = {
     'A0': 21
 };
 
+const GUITAR_TO_NOTE = {
+    'GE': 'E2',
+    'GA': 'A2',
+    'GD': 'D3',
+    'GG': 'G3',
+    'GB': 'B3',
+    'Ge': 'E4'
+};
+
 
 let validMidiValue = /^M[0-9]{1,3}$/;
+let validGuitarValue = /^G[EADGBe][0-9]{1,2}$/;
+
 function midiToFreq(midiValue) {
     if((midiValue < 0) || (midiValue > 127)) {
         throw "Error, invalid midi value...";
@@ -303,6 +314,11 @@ function getVariable(resultObject, name, lineNumber) {
     if("global" in resultObject) return getVariable(resultObject.global, name, lineNumber);
     
     if(name in NOTE_TO_MIDI) name = "M" + NOTE_TO_MIDI[name];
+    if(name.match(validGuitarValue) != null) {
+        let gString = name.slice(0, 2);
+        let fretNum = +name.slice(2);
+        name = "M" + (NOTE_TO_MIDI[GUITAR_TO_NOTE[gString]] + fretNum);
+    }
     if(name.match(validMidiValue) != null) {
         let mNum = Number(name.slice(1));
         if(mNum >= 0 && mNum <= 127) return midiToFreq(mNum);
