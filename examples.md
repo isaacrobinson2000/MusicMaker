@@ -1,4 +1,8 @@
-[Home](index.md)
+---
+layout: default
+---
+
+[Home](index.html)
 
 ### Class Code Examples
 

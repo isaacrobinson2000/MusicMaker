@@ -1,4 +1,8 @@
-[Class Composition List](../listings.md)
+---
+layout: default
+---
+
+[Class Composition List](../listings.html)
 
 ### Class of Summer 2021
 

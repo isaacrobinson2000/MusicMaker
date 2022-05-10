@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 Discover how our modern-day digital devices produce sound, 
 by using Arduino’s to create your very own musical instruments!
  Once created, you'll compose musical tunes on your instruments, 

@@ -152,7 +152,8 @@ let keywords = {
     "track": true,
     "play": true,
     "rest": true,
-    "repeat": true
+    "repeat": true,
+    "riff": true
 };
 
 let literals = {
@@ -377,6 +378,49 @@ class SetValue extends Instruction {
     }
 }
 
+class PlayRiff extends Instruction {
+    constructor(riffName, lineNum) {
+        super();
+        this.riffName = riffName;
+        this.line = lineNum;
+    }
+    
+    static isType(tokens, index) {
+        if(!(index < tokens.length - 1)) return false;
+        let [[type, name, , ], [type2, name2, , ]] = tokens.slice(index, index + 2);
+        return (type == "keyword" && name == "play" && type2 == "keyword" && name2 == "riff");
+    }
+    
+    static parse(tokens, index) {
+        let [word, word2, id, term] = tokens.slice(index, index + 4);
+        validateTerminator(...term);
+        if(word[0] != "keyword" || word[1] != "play" || word2[0] != "keyword" || word2[1] != "riff") throw errorMsg(word[2], "Not a play riff command!");
+        if(id[0] != "identifier") throw errorMsg(id[2], "The third argument must be the riff name, or an identifier, not a " + id[0]);
+        
+        return [new this(id[1], word[2]), index + 4];
+    }
+    
+    getRoot(obj) {
+        if(!("global" in obj)) {
+            return obj;
+        }
+        return this.getRoot(obj.global);
+    }
+    
+    exec(resultObject) {        
+        resultObject.notes = resultObject.notes ?? [];
+        let riffs = this.getRoot(resultObject).riffs;
+        
+        // Attempt to find the riff by it's name...
+        if(riffs == undefined || !(this.riffName in riffs)) throw errorMsg(this.line, "Unable to find a riff with the name: '" + this.riffName + "'");
+        
+        let riff = riffs[this.riffName];
+        if(riff == resultObject) throw errorMsg(this.line, "A riff can't play itself!");
+        
+        resultObject.notes.push(...(riff.notes ?? []));
+    }
+}
+
 class PlayNote extends Instruction {
     
     static VALID_ARG_TYPES = {
@@ -540,6 +584,46 @@ class Track extends Instruction {
     }
 }
 
+class Riff extends Instruction {
+    constructor(name, block) {
+        super();
+        this.name = name;
+        this.block = block;
+    }
+    
+    static isType(tokens, index) {
+        let [type, name, , ] = tokens[index];
+        return (type == "keyword" && name == "riff");
+    }
+    
+    static parse(tokens, index) {
+        if(!this.isType(tokens, index)) throw errorMsg(tokens[index][2], "Not a riff!");
+        
+        let [word, name, op1, op2] = tokens.slice(index, index + 4);
+        if(name[0] != "identifier") throw errorMsg(name[2], "Not an identifier, riff name must be an identifier.");
+        
+        if(op1[0] == "blockstart") {
+            let [obj, newLoc] = Block.parse(tokens, index + 2, INNER_SCOPE_INSTRUCTIONS);
+            return [new this(name[1], obj), newLoc];
+        }
+        
+        if(op1[0] == "terminator" && op2[0] == "blockstart") {
+            let [obj, newLoc] = Block.parse(tokens, index + 3, INNER_SCOPE_INSTRUCTIONS);
+            return [new this(name[1], obj), newLoc];
+        }
+        
+        throw errorMsg(op1[2], "Riff identifier must be followed by a code block!");
+    }
+    
+    exec(resultObject) {
+        resultObject.riffs = resultObject.riffs ?? {};
+        
+        resultObject.riffs[this.name] = {global: resultObject};
+        // Construct global reference, used for global variable access when variable isn't found in local scope...
+        this.block.exec(resultObject.riffs[this.name]);
+    }
+}
+
 class Repeat extends Instruction {
     constructor(nRepsType, numReps, line, block) {
         super();
@@ -602,8 +686,8 @@ class NoOp extends Instruction {
     exec(resultObject) {}
 }
 
-const OUTER_SCOPE_INSTRUCTIONS = [SetValue, Track, NoOp];
-const INNER_SCOPE_INSTRUCTIONS = [Repeat, PlayNote, Rest, SetValue, NoOp];
+const OUTER_SCOPE_INSTRUCTIONS = [SetValue, Track, Riff, NoOp];
+const INNER_SCOPE_INSTRUCTIONS = [Repeat, PlayRiff, PlayNote, Rest, SetValue, NoOp];
 
 function parse(tokens, instructions) {
     // Strip comments...
