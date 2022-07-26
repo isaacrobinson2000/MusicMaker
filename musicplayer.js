@@ -28,10 +28,13 @@ class TonePlayer {
         return this._length;
     }
     
-    static genOsc(freq) {
-        let osc = TonePlayer.AudioCtx.createOscillator()
-        osc.type = "square";
-        osc.connect(TonePlayer.AudioCtx.destination);
+    static genOsc(type = "square", freq = 440, volume = 1) {
+        let osc = TonePlayer.AudioCtx.createOscillator();
+        let gain = TonePlayer.AudioCtx.createGain();
+        gain.gain.value = volume;
+        osc.type = type;
+        osc.connect(gain);
+        gain.connect(TonePlayer.AudioCtx.destination);
         osc.frequency.setValueAtTime(freq, TonePlayer.AudioCtx.currentTime);
         return osc;
     }
@@ -203,6 +206,7 @@ class TonePlayer {
             if(timeUntil <= 0) {
                 let idx = this.currentIndexes[name];
                 let track = this.tracks[name].notes ?? [];
+                let vars = this.tracks[name].variables ?? {};
                 let osc = this.oscillators[name];
                 
                 if(osc != null) {
@@ -214,7 +218,7 @@ class TonePlayer {
                     let cmd = track[idx];
                     
                     if(cmd[0] == "play") {
-                        let osc = TonePlayer.genOsc(cmd[1]);
+                        let osc = TonePlayer.genOsc(vars.WAVE_TYPE ?? "square", cmd[1] + (vars.FREQUENCY_SHIFT ?? 0), vars.VOLUME ?? 1);
                         osc.start();
                         this.oscillators[name] = osc;
                     }

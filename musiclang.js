@@ -328,8 +328,12 @@ function getVariable(resultObject, name, lineNumber) {
     throw errorMsg(lineNumber, "Variable " + name + " is not defined!");
 }
 
+function _toString(value) {
+    return String(value).slice(1, value.length - 1);
+}
+
 const VALUE_CONV_TABLE = {
-    "literal:string": String,
+    "literal:string": _toString,
     "literal:integer": Number,
     "literal:float": Number
 };
